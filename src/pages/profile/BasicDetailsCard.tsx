@@ -154,92 +154,213 @@ const BasicDetailsCard: React.FC = () => {
   };
 
   return (
-    <div className="w-full max-w-2xl mx-auto p-6">
-      <form onSubmit={handleSubmit} className="space-y-6">
-        {/* Update Photo Section */}
-        <div className="flex flex-col items-center mb-6">
-          {originalImage ? (
-            <div className="relative w-full max-w-md aspect-square">
-              <img
-                src={originalImage}
-                alt="Original photo"
-                className="w-full h-full object-contain"
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+      <div className="w-full max-w-[420px] bg-white rounded-xl shadow-lg">
+        <div className="p-6">
+          <div className="flex items-center mb-6">
+            <button
+              onClick={() => navigate('/welcome')}
+              className="text-gray-600 hover:text-gray-900 transition-colors p-2 rounded-full hover:bg-gray-100"
+              aria-label="Back to welcome page"
+            >
+              <ArrowLeft size={20} />
+            </button>
+            <h1 className="text-xl font-semibold text-gray-900 ml-2">Basic Details</h1>
+          </div>
+
+          <form onSubmit={handleSubmit} className="space-y-6">
+            {/* Photo Upload Section */}
+            <div className="flex flex-col items-center mb-6">
+              {originalImage ? (
+                <div className="relative w-full max-w-md aspect-square">
+                  <img
+                    src={originalImage}
+                    alt="Original photo"
+                    className="w-full h-full object-contain"
+                  />
+                  <div
+                    className="absolute border-2 border-white shadow-lg cursor-move"
+                    style={{
+                      left: cropBox.x,
+                      top: cropBox.y,
+                      width: cropBox.size,
+                      height: cropBox.size,
+                      filter: `brightness(${formData.photoBrightness})`
+                    }}
+                  />
+                  <div className="mt-4">
+                    <label className="block text-sm text-gray-600 mb-1">
+                      Brightness
+                    </label>
+                    <input
+                      type="range"
+                      min="0.5"
+                      max="1.5"
+                      step="0.1"
+                      value={formData.photoBrightness}
+                      onChange={e => setFormData(prev => ({
+                        ...prev,
+                        photoBrightness: parseFloat(e.target.value)
+                      }))}
+                      className="w-full"
+                      aria-label="Adjust photo brightness"
+                      aria-valuemin={0.5}
+                      aria-valuemax={1.5}
+                      aria-valuenow={formData.photoBrightness}
+                    />
+                  </div>
+                  <Button
+                    onClick={handleSavePhoto}
+                    isLoading={isLoading}
+                    className="mt-4"
+                  >
+                    Save Photo
+                  </Button>
+                </div>
+              ) : (
+                <div className="text-center">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handlePhotoUpload}
+                    className="hidden"
+                    id="photo-upload"
+                  />
+                  <label
+                    htmlFor="photo-upload"
+                    className="cursor-pointer inline-block"
+                  >
+                    <div className="w-32 h-32 rounded-full bg-gray-200 flex items-center justify-center">
+                      <Upload className="w-8 h-8 text-gray-500" />
+                    </div>
+                    <p className="mt-2 text-sm text-gray-600">Upload Photo</p>
+                  </label>
+                </div>
+              )}
+              
+              {/* Hidden canvas for cropping */}
+              <canvas
+                ref={canvasRef}
+                style={{ display: 'none' }}
               />
-              <div
-                className="absolute border-2 border-white shadow-lg cursor-move"
-                style={{
-                  left: cropBox.x,
-                  top: cropBox.y,
-                  width: cropBox.size,
-                  height: cropBox.size,
-                  filter: `brightness(${formData.photoBrightness})`
-                }}
-              />
-              <div className="mt-4">
-                <label className="block text-sm text-gray-600 mb-1">
-                  Brightness
+            </div>
+
+            {/* Form Fields */}
+            <div className="space-y-4">
+              {/* Preferred Name */}
+              <div>
+                <label htmlFor="preferredName" className="block text-sm font-medium text-gray-700">
+                  Preferred Name <span className="text-red-500">*</span>
                 </label>
                 <input
-                  type="range"
-                  min="0.5"
-                  max="1.5"
-                  step="0.1"
-                  value={formData.photoBrightness}
-                  onChange={e => setFormData(prev => ({
-                    ...prev,
-                    photoBrightness: parseFloat(e.target.value)
-                  }))}
-                  className="w-full"
-                  aria-label="Adjust photo brightness"
-                  aria-valuemin={0.5}
-                  aria-valuemax={1.5}
-                  aria-valuenow={formData.photoBrightness}
+                  id="preferredName"
+                  type="text"
+                  value={formData.preferredName}
+                  onChange={e => setFormData(prev => ({ ...prev, preferredName: e.target.value }))}
+                  className="mt-1 block w-full rounded-lg border border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500"
+                  required
+                  aria-required="true"
                 />
               </div>
-              <Button
-                onClick={handleSavePhoto}
-                isLoading={isLoading}
-                className="mt-4"
-              >
-                Save Photo
-              </Button>
-            </div>
-          ) : (
-            <div className="text-center">
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handlePhotoUpload}
-                className="hidden"
-                id="photo-upload"
-              />
-              <label
-                htmlFor="photo-upload"
-                className="cursor-pointer inline-block"
-              >
-                <div className="w-32 h-32 rounded-full bg-gray-200 flex items-center justify-center">
-                  <Upload className="w-8 h-8 text-gray-500" />
-                </div>
-                <p className="mt-2 text-sm text-gray-600">Upload Photo</p>
-              </label>
-            </div>
-          )}
-          
-          {/* Hidden canvas for cropping */}
-          <canvas
-            ref={canvasRef}
-            style={{ display: 'none' }}
-          />
-        </div>
 
-        <Button
-          type="submit"
-          isLoading={isLoading}
-          className="w-full"
-        >
-          Continue
-        </Button>
-      </form>
+              {/* Pronouns */}
+              <div>
+                <label htmlFor="pronouns" className="block text-sm font-medium text-gray-700">
+                  Pronouns <span className="text-red-500">*</span>
+                </label>
+                <select
+                  id="pronouns"
+                  value={formData.pronouns}
+                  onChange={e => setFormData(prev => ({ ...prev, pronouns: e.target.value }))}
+                  className="mt-1 block w-full rounded-lg border border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500"
+                  required
+                  aria-required="true"
+                >
+                  <option value="">Select pronouns</option>
+                  <option value="She/Her">She/Her</option>
+                  <option value="He/Him">He/Him</option>
+                  <option value="They/Them">They/Them</option>
+                  <option value="Other">Other...</option>
+                </select>
+
+                {formData.pronouns === 'Other' && (
+                  <input
+                    id="customPronouns"
+                    type="text"
+                    value={formData.customPronouns}
+                    onChange={e => setFormData(prev => ({ ...prev, customPronouns: e.target.value }))}
+                    className="mt-2 block w-full rounded-lg border border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500"
+                    placeholder="Enter your pronouns"
+                    required
+                    aria-required="true"
+                  />
+                )}
+              </div>
+
+              {/* Year in School */}
+              <div>
+                <label htmlFor="yearInSchool" className="block text-sm font-medium text-gray-700">
+                  Year in School <span className="text-red-500">*</span>
+                </label>
+                <select
+                  id="yearInSchool"
+                  value={formData.yearInSchool}
+                  onChange={e => setFormData(prev => ({ ...prev, yearInSchool: e.target.value }))}
+                  className="mt-1 block w-full rounded-lg border border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500"
+                  required
+                  aria-required="true"
+                >
+                  <option value="">Select year</option>
+                  <option value="First">First Year</option>
+                  <option value="Sophomore">Sophomore</option>
+                  <option value="Junior">Junior</option>
+                  <option value="Senior">Senior</option>
+                  <option value="Graduate">Graduate</option>
+                </select>
+              </div>
+
+              {/* Major */}
+              <div>
+                <label htmlFor="major" className="block text-sm font-medium text-gray-700">
+                  Major <span className="text-red-500">*</span>
+                </label>
+                <input
+                  id="major"
+                  type="text"
+                  value={formData.major}
+                  onChange={e => setFormData(prev => ({ ...prev, major: e.target.value }))}
+                  className="mt-1 block w-full rounded-lg border border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500"
+                  required
+                  aria-required="true"
+                />
+              </div>
+
+              {/* Minor */}
+              <div>
+                <label htmlFor="minor" className="block text-sm font-medium text-gray-700">
+                  Minor
+                </label>
+                <input
+                  id="minor"
+                  type="text"
+                  value={formData.minor}
+                  onChange={e => setFormData(prev => ({ ...prev, minor: e.target.value }))}
+                  className="mt-1 block w-full rounded-lg border border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500"
+                />
+              </div>
+            </div>
+
+            {/* Submit Button */}
+            <Button
+              type="submit"
+              isLoading={isLoading}
+              className="w-full"
+            >
+              Continue
+            </Button>
+          </form>
+        </div>
+      </div>
     </div>
   );
 };
