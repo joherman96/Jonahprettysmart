@@ -6,7 +6,7 @@ interface BasicDetailsData {
   yearInSchool: string;
   major: string;
   minor: string | null;
-  photoUrl: string;
+  photoUrl: string | null;
 }
 
 const corsHeaders = {
