@@ -6,20 +6,26 @@ import Button from '../../components/ui/Button';
 import { saveBasicDetails, uploadProfilePhoto } from '../../services/profile.service';
 import useAuthStore from '../../store/authStore';
 
-// ... (previous imports and constants)
-
 const BasicDetailsCard: React.FC = () => {
-  // ... (previous state and refs)
-
-  // Add new state for cropping
   const [cropBox, setCropBox] = useState({ x: 0, y: 0, size: 200 });
   const [originalImage, setOriginalImage] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [formData, setFormData] = useState({
+    preferredName: '',
+    pronouns: '',
+    customPronouns: '',
+    yearInSchool: '',
+    major: '',
+    minor: '',
+    photoUrl: '',
+    photoBrightness: 1
+  });
+  
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const navigate = useNavigate();
   
   const { user } = useAuthStore();
   const userId = user?.id;
-
-  // ... (previous handlers)
 
   const handlePhotoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -95,6 +101,30 @@ const BasicDetailsCard: React.FC = () => {
     }
   };
 
+  const validateForm = () => {
+    if (!formData.preferredName.trim()) {
+      toast.error('Please enter your preferred name');
+      return false;
+    }
+    if (!formData.pronouns) {
+      toast.error('Please select your pronouns');
+      return false;
+    }
+    if (formData.pronouns === 'Other' && !formData.customPronouns.trim()) {
+      toast.error('Please enter your custom pronouns');
+      return false;
+    }
+    if (!formData.yearInSchool) {
+      toast.error('Please select your year in school');
+      return false;
+    }
+    if (!formData.major.trim()) {
+      toast.error('Please enter your major');
+      return false;
+    }
+    return true;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
@@ -123,72 +153,94 @@ const BasicDetailsCard: React.FC = () => {
     }
   };
 
-  // ... (rest of the component remains the same, but update the photo section UI)
-
   return (
-    // ... (previous JSX)
-    
-    {/* Update Photo Section */}
-    <div className="flex flex-col items-center mb-6">
-      {originalImage ? (
-        <div className="relative w-full max-w-md aspect-square">
-          <img
-            src={originalImage}
-            alt="Original photo"
-            className="w-full h-full object-contain"
+    <div className="w-full max-w-2xl mx-auto p-6">
+      <form onSubmit={handleSubmit} className="space-y-6">
+        {/* Update Photo Section */}
+        <div className="flex flex-col items-center mb-6">
+          {originalImage ? (
+            <div className="relative w-full max-w-md aspect-square">
+              <img
+                src={originalImage}
+                alt="Original photo"
+                className="w-full h-full object-contain"
+              />
+              <div
+                className="absolute border-2 border-white shadow-lg cursor-move"
+                style={{
+                  left: cropBox.x,
+                  top: cropBox.y,
+                  width: cropBox.size,
+                  height: cropBox.size,
+                  filter: `brightness(${formData.photoBrightness})`
+                }}
+              />
+              <div className="mt-4">
+                <label className="block text-sm text-gray-600 mb-1">
+                  Brightness
+                </label>
+                <input
+                  type="range"
+                  min="0.5"
+                  max="1.5"
+                  step="0.1"
+                  value={formData.photoBrightness}
+                  onChange={e => setFormData(prev => ({
+                    ...prev,
+                    photoBrightness: parseFloat(e.target.value)
+                  }))}
+                  className="w-full"
+                  aria-label="Adjust photo brightness"
+                  aria-valuemin={0.5}
+                  aria-valuemax={1.5}
+                  aria-valuenow={formData.photoBrightness}
+                />
+              </div>
+              <Button
+                onClick={handleSavePhoto}
+                isLoading={isLoading}
+                className="mt-4"
+              >
+                Save Photo
+              </Button>
+            </div>
+          ) : (
+            <div className="text-center">
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handlePhotoUpload}
+                className="hidden"
+                id="photo-upload"
+              />
+              <label
+                htmlFor="photo-upload"
+                className="cursor-pointer inline-block"
+              >
+                <div className="w-32 h-32 rounded-full bg-gray-200 flex items-center justify-center">
+                  <Upload className="w-8 h-8 text-gray-500" />
+                </div>
+                <p className="mt-2 text-sm text-gray-600">Upload Photo</p>
+              </label>
+            </div>
+          )}
+          
+          {/* Hidden canvas for cropping */}
+          <canvas
+            ref={canvasRef}
+            style={{ display: 'none' }}
           />
-          <div
-            className="absolute border-2 border-white shadow-lg cursor-move"
-            style={{
-              left: cropBox.x,
-              top: cropBox.y,
-              width: cropBox.size,
-              height: cropBox.size,
-              filter: `brightness(${formData.photoBrightness})`
-            }}
-            // Add drag handlers here
-          />
-          <div className="mt-4">
-            <label className="block text-sm text-gray-600 mb-1">
-              Brightness
-            </label>
-            <input
-              type="range"
-              min="0.5"
-              max="1.5"
-              step="0.1"
-              value={formData.photoBrightness}
-              onChange={e => setFormData(prev => ({
-                ...prev,
-                photoBrightness: parseFloat(e.target.value)
-              }))}
-              className="w-full"
-              aria-label="Adjust photo brightness"
-              aria-valuemin={0.5}
-              aria-valuemax={1.5}
-              aria-valuenow={formData.photoBrightness}
-            />
-          </div>
-          <Button
-            onClick={handleSavePhoto}
-            isLoading={isLoading}
-            className="mt-4"
-          >
-            Save Photo
-          </Button>
         </div>
-      ) : (
-        // ... (existing photo display/upload button code)
-      )}
-      
-      {/* Hidden canvas for cropping */}
-      <canvas
-        ref={canvasRef}
-        style={{ display: 'none' }}
-      />
+
+        <Button
+          type="submit"
+          isLoading={isLoading}
+          className="w-full"
+        >
+          Continue
+        </Button>
+      </form>
     </div>
-    
-    // ... (rest of the JSX)
   );
 };
 
