@@ -6,7 +6,6 @@ import PasscodePage from './pages/auth/PasscodePage';
 import WelcomePage from './pages/WelcomePage';
 import ProfileBuilder from './pages/ProfileBuilder';
 import BasicDetailsCard from './pages/profile/BasicDetailsCard';
-import LifestyleQuiz from './pages/profile/LifestyleQuiz';
 import PrivateRoute from './components/auth/PrivateRoute';
 import AuthRoute from './components/auth/AuthRoute';
 
@@ -24,7 +23,6 @@ function App() {
           <Route path="/welcome" element={<WelcomePage />} />
           <Route path="/profile-builder" element={<ProfileBuilder />} />
           <Route path="/profile/basic-details" element={<BasicDetailsCard />} />
-          <Route path="/profile/lifestyle-quiz" element={<LifestyleQuiz />} />
         </Route>
       </Route>
     </Routes>

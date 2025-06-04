@@ -1,30 +1,16 @@
-import React, { useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Users, LogOut } from 'lucide-react';
 import Button from '../components/ui/Button';
 import useAuthStore from '../store/authStore';
 
 const WelcomePage: React.FC = () => {
   const navigate = useNavigate();
-  const location = useLocation();
   const { logout } = useAuthStore();
-  const userId = location.state?.userId as string | undefined;
-  const hasStarted = localStorage.getItem('hasStartedProfile') === 'true';
-  
-  useEffect(() => {
-    if (!userId) {
-      navigate('/auth/signin');
-    }
-  }, [userId, navigate]);
   
   const handleLogout = () => {
     logout();
     navigate('/auth/signin');
-  };
-  
-  const handleStart = () => {
-    localStorage.setItem('hasStartedProfile', 'true');
-    navigate('/profile/lifestyle-quiz', { state: { userId } });
   };
   
   return (
@@ -54,17 +40,26 @@ const WelcomePage: React.FC = () => {
           </div>
           
           <h1 className="text-2xl font-bold text-gray-900 mb-2">Welcome to RoomieMatch!</h1>
-          <p className="text-gray-600 mb-8">
-            Let's find your perfect roommate match. Click below to start building your profile.
+          <p className="text-gray-600 mb-6">
+            You've successfully authenticated. This is just a placeholder page - the real roommate matching features will be built in the next phase.
           </p>
           
-          <Button
-            onClick={handleStart}
-            className="w-full"
-            aria-label={hasStarted ? 'Continue Creating' : 'Start Creating Account'}
-          >
-            {hasStarted ? 'Continue Creating' : 'Start Creating Account'}
-          </Button>
+          <div className="space-y-4">
+            <p className="text-sm text-gray-500">
+              Next steps will include:
+            </p>
+            <ul className="text-sm text-gray-600 text-left list-disc ml-5 space-y-1">
+              <li>Building your roommate profile</li>
+              <li>Setting your preferences</li>
+              <li>Finding your perfect roommate match</li>
+            </ul>
+          </div>
+          
+          <div className="mt-8">
+            <Button onClick={handleLogout}>
+              Sign out
+            </Button>
+          </div>
         </div>
       </main>
     </div>
