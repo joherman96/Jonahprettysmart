@@ -1,3 +1,6 @@
+import { SignInCredentials, VerificationCodeData, PasscodeData } from '../types';
+import { sha256Hash } from '../utils/crypto';
+
 interface BasicDetailsData {
   preferredName: string;
   pronouns: string;
