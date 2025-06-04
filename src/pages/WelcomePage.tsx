@@ -8,7 +8,7 @@ const WelcomePage: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { logout } = useAuthStore();
-  const userId = location.state?.userId;
+  const userId = location.state?.userId as string | undefined;
   const hasStarted = localStorage.getItem('hasStartedProfile') === 'true';
   
   useEffect(() => {
@@ -61,6 +61,7 @@ const WelcomePage: React.FC = () => {
           <Button
             onClick={handleStart}
             className="w-full"
+            aria-label={hasStarted ? 'Continue Creating' : 'Start Creating Account'}
           >
             {hasStarted ? 'Continue Creating' : 'Start Creating Account'}
           </Button>
