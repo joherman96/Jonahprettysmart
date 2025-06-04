@@ -1,30 +1,71 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { Users, LogOut } from 'lucide-react';
 import Button from '../components/ui/Button';
+import useAuthStore from '../store/authStore';
 
 const WelcomePage: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const hasStarted = localStorage.getItem('hasStartedProfile') === 'true';
+  const { logout } = useAuthStore();
   const userId = location.state?.userId;
+  const hasStarted = localStorage.getItem('hasStartedProfile') === 'true';
+  
+  useEffect(() => {
+    if (!userId) {
+      navigate('/auth/signin');
+    }
+  }, [userId, navigate]);
+  
+  const handleLogout = () => {
+    logout();
+    navigate('/auth/signin');
+  };
   
   const handleStart = () => {
     localStorage.setItem('hasStartedProfile', 'true');
-    if (!userId) {
-      navigate('/welcome');
-      return;
-    }
     navigate('/profile/lifestyle-quiz', { state: { userId } });
   };
   
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-      <Button
-        onClick={handleStart}
-        aria-label={hasStarted ? 'Continue Creating' : 'Start Creating Account'}
-      >
-        {hasStarted ? 'Continue Creating' : 'Start Creating Account'}
-      </Button>
+    <div className="min-h-screen bg-gray-50 flex flex-col">
+      <header className="bg-white shadow-sm">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between h-16 items-center">
+            <div className="flex items-center">
+              <Users className="h-8 w-8 text-primary-600" />
+              <span className="ml-2 text-xl font-semibold text-gray-900">RoomieMatch</span>
+            </div>
+            <button
+              onClick={handleLogout}
+              className="inline-flex items-center px-3 py-1.5 border border-gray-300 text-sm leading-5 font-medium rounded-full text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
+            >
+              <LogOut size={16} className="mr-1" />
+              Sign out
+            </button>
+          </div>
+        </div>
+      </header>
+      
+      <main className="flex-grow flex items-center justify-center px-4">
+        <div className="max-w-md w-full bg-white shadow-lg rounded-lg p-8 text-center">
+          <div className="h-16 w-16 bg-primary-50 rounded-full flex items-center justify-center mx-auto mb-6">
+            <Users size={32} className="text-primary-600" />
+          </div>
+          
+          <h1 className="text-2xl font-bold text-gray-900 mb-2">Welcome to RoomieMatch!</h1>
+          <p className="text-gray-600 mb-8">
+            Let's find your perfect roommate match. Click below to start building your profile.
+          </p>
+          
+          <Button
+            onClick={handleStart}
+            className="w-full"
+          >
+            {hasStarted ? 'Continue Creating' : 'Start Creating Account'}
+          </Button>
+        </div>
+      </main>
     </div>
   );
 };
