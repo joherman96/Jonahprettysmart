@@ -8,6 +8,18 @@ interface BasicDetailsData {
   photoUrl: string;
 }
 
+interface LifestyleQuizData {
+  bedtime: number;
+  wakeTime: number;
+  cleanliness: number;
+  noiseTolerance: number;
+  guestFrequency: number;
+  petFriendliness: number;
+  smokingPreference: number;
+  travelFrequency: number;
+  studyLocation: number;
+}
+
 export async function saveBasicDetails(userId: string, data: BasicDetailsData) {
   // Validate required fields
   if (!data.preferredName.trim()) {
@@ -41,5 +53,25 @@ export async function saveBasicDetails(userId: string, data: BasicDetailsData) {
     return { success: true };
   } catch (error) {
     throw new Error('Failed to save profile details');
+  }
+}
+
+export async function saveLifestyleQuiz(userId: string, data: LifestyleQuizData): Promise<{ success: boolean }> {
+  // Validate all fields are numbers between 0-10
+  const keys = Object.keys(data) as (keyof typeof data)[];
+  for (const key of keys) {
+    const val = data[key];
+    if (typeof val !== "number" || val < 0 || val > 10) {
+      throw new Error(`Invalid value for ${key}`);
+    }
+  }
+
+  try {
+    // In a real app, this would update the database
+    // For now, we'll just simulate success
+    console.log('Saving lifestyle quiz:', { userId, data });
+    return { success: true };
+  } catch (error) {
+    throw new Error('Failed to save lifestyle quiz');
   }
 }

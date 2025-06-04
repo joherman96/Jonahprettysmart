@@ -1,14 +1,20 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import Button from '../components/ui/Button';
 
 const WelcomePage: React.FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const hasStarted = localStorage.getItem('hasStartedProfile') === 'true';
+  const userId = location.state?.userId;
   
   const handleStart = () => {
     localStorage.setItem('hasStartedProfile', 'true');
-    navigate('/blank');
+    if (!userId) {
+      navigate('/welcome');
+      return;
+    }
+    navigate('/profile/lifestyle-quiz', { state: { userId } });
   };
   
   return (
