@@ -96,12 +96,9 @@ const LifestyleQuiz: React.FC = () => {
               min={0}
               max={10}
               step={1}
-              value={bedtime ?? 0}
-              onChange={(e) => setBedtime(Number(e.target.value))}
+              value={bedtime ?? 5}
+              onChange={e => setBedtime(Number(e.target.value))}
               className="w-full h-2 bg-gray-200 rounded-lg appearance-none focus:outline-none focus:ring-0 focus:border-primary"
-              aria-valuemin={0}
-              aria-valuemax={10}
-              aria-valuenow={bedtime ?? 0}
             />
             <p className="text-xs text-gray-500 mt-1">{bedtime ?? '-'}</p>
           </div>
@@ -120,12 +117,9 @@ const LifestyleQuiz: React.FC = () => {
               min={0}
               max={10}
               step={1}
-              value={wakeTime ?? 0}
-              onChange={(e) => setWakeTime(Number(e.target.value))}
+              value={wakeTime ?? 5}
+              onChange={e => setWakeTime(Number(e.target.value))}
               className="w-full h-2 bg-gray-200 rounded-lg appearance-none focus:outline-none focus:ring-0 focus:border-primary"
-              aria-valuemin={0}
-              aria-valuemax={10}
-              aria-valuenow={wakeTime ?? 0}
             />
             <p className="text-xs text-gray-500 mt-1">{wakeTime ?? '-'}</p>
           </div>
@@ -144,12 +138,9 @@ const LifestyleQuiz: React.FC = () => {
               min={0}
               max={10}
               step={1}
-              value={cleanliness ?? 0}
-              onChange={(e) => setCleanliness(Number(e.target.value))}
+              value={cleanliness ?? 5}
+              onChange={e => setCleanliness(Number(e.target.value))}
               className="w-full h-2 bg-gray-200 rounded-lg appearance-none focus:outline-none focus:ring-0 focus:border-primary"
-              aria-valuemin={0}
-              aria-valuemax={10}
-              aria-valuenow={cleanliness ?? 0}
             />
             <p className="text-xs text-gray-500 mt-1">{cleanliness ?? '-'}</p>
           </div>
@@ -168,12 +159,9 @@ const LifestyleQuiz: React.FC = () => {
               min={0}
               max={10}
               step={1}
-              value={noiseTolerance ?? 0}
-              onChange={(e) => setNoiseTolerance(Number(e.target.value))}
+              value={noiseTolerance ?? 5}
+              onChange={e => setNoiseTolerance(Number(e.target.value))}
               className="w-full h-2 bg-gray-200 rounded-lg appearance-none focus:outline-none focus:ring-0 focus:border-primary"
-              aria-valuemin={0}
-              aria-valuemax={10}
-              aria-valuenow={noiseTolerance ?? 0}
             />
             <p className="text-xs text-gray-500 mt-1">{noiseTolerance ?? '-'}</p>
           </div>
@@ -192,12 +180,9 @@ const LifestyleQuiz: React.FC = () => {
               min={0}
               max={10}
               step={1}
-              value={guestFrequency ?? 0}
-              onChange={(e) => setGuestFrequency(Number(e.target.value))}
+              value={guestFrequency ?? 5}
+              onChange={e => setGuestFrequency(Number(e.target.value))}
               className="w-full h-2 bg-gray-200 rounded-lg appearance-none focus:outline-none focus:ring-0 focus:border-primary"
-              aria-valuemin={0}
-              aria-valuemax={10}
-              aria-valuenow={guestFrequency ?? 0}
             />
             <p className="text-xs text-gray-500 mt-1">{guestFrequency ?? '-'}</p>
           </div>
@@ -216,12 +201,9 @@ const LifestyleQuiz: React.FC = () => {
               min={0}
               max={10}
               step={1}
-              value={petFriendliness ?? 0}
-              onChange={(e) => setPetFriendliness(Number(e.target.value))}
+              value={petFriendliness ?? 5}
+              onChange={e => setPetFriendliness(Number(e.target.value))}
               className="w-full h-2 bg-gray-200 rounded-lg appearance-none focus:outline-none focus:ring-0 focus:border-primary"
-              aria-valuemin={0}
-              aria-valuemax={10}
-              aria-valuenow={petFriendliness ?? 0}
             />
             <p className="text-xs text-gray-500 mt-1">{petFriendliness ?? '-'}</p>
           </div>
@@ -240,12 +222,9 @@ const LifestyleQuiz: React.FC = () => {
               min={0}
               max={10}
               step={1}
-              value={smokingPreference ?? 0}
-              onChange={(e) => setSmokingPreference(Number(e.target.value))}
+              value={smokingPreference ?? 5}
+              onChange={e => setSmokingPreference(Number(e.target.value))}
               className="w-full h-2 bg-gray-200 rounded-lg appearance-none focus:outline-none focus:ring-0 focus:border-primary"
-              aria-valuemin={0}
-              aria-valuemax={10}
-              aria-valuenow={smokingPreference ?? 0}
             />
             <p className="text-xs text-gray-500 mt-1">{smokingPreference ?? '-'}</p>
           </div>
@@ -264,12 +243,9 @@ const LifestyleQuiz: React.FC = () => {
               min={0}
               max={10}
               step={1}
-              value={travelFrequency ?? 0}
-              onChange={(e) => setTravelFrequency(Number(e.target.value))}
+              value={travelFrequency ?? 5}
+              onChange={e => setTravelFrequency(Number(e.target.value))}
               className="w-full h-2 bg-gray-200 rounded-lg appearance-none focus:outline-none focus:ring-0 focus:border-primary"
-              aria-valuemin={0}
-              aria-valuemax={10}
-              aria-valuenow={travelFrequency ?? 0}
             />
             <p className="text-xs text-gray-500 mt-1">{travelFrequency ?? '-'}</p>
           </div>
@@ -288,12 +264,9 @@ const LifestyleQuiz: React.FC = () => {
               min={0}
               max={10}
               step={1}
-              value={studyLocation ?? 0}
-              onChange={(e) => setStudyLocation(Number(e.target.value))}
+              value={studyLocation ?? 5}
+              onChange={e => setStudyLocation(Number(e.target.value))}
               className="w-full h-2 bg-gray-200 rounded-lg appearance-none focus:outline-none focus:ring-0 focus:border-primary"
-              aria-valuemin={0}
-              aria-valuemax={10}
-              aria-valuenow={studyLocation ?? 0}
             />
             <p className="text-xs text-gray-500 mt-1">{studyLocation ?? '-'}</p>
           </div>
